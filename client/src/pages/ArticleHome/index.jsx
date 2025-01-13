@@ -7,10 +7,13 @@ const ArticlesHome = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Use environment variables to dynamically set the API base URL
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || "http://localhost:3000";
+
   useEffect(() => {
     // Fetch articles from the API when the component mounts
     axios
-      .get("http://localhost:3000/api/articles/get-articles") // Update with your local or production API endpoint
+      .get(`${API_BASE_URL}/api/articles/get-articles`) // Use dynamic base URL
       .then((res) => {
         setBlogs(res.data); // Store fetched articles in the state
         setLoading(false); // Set loading to false after data is fetched
@@ -19,7 +22,7 @@ const ArticlesHome = () => {
       .catch((err) => {
         console.log(err); // Handle errors
       });
-  }, []);
+  }, [API_BASE_URL]); // Dependency array includes API_BASE_URL
 
   return (
     <>
