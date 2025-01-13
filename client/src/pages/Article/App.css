@@ -1,0 +1,183 @@
+/* Main container */
+.article-container {
+  font-family: 'Helvetica', 'Arial', sans-serif;
+  margin: 0 auto;
+  max-width: 900px;
+  padding: 20px;
+  line-height: 1.8;
+  color: #333;
+}
+
+/* Go Back Link */
+.blog-goBack {
+  font-size: 16px;
+  color: #0077cc;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 20px;
+  font-weight: bold;
+}
+
+.blog-goBack:hover {
+  text-decoration: underline;
+}
+
+/* Title Image Container */
+.title-image-container {
+  position: relative;
+  width: 100%;
+  height: 600px; /* Adjust as needed */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Colored Block (Top Half) */
+.colored-block {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70%; /* Covers the top half */
+  background: linear-gradient(135deg, #1e0430, #2e033f); /* Purple gradient */
+  z-index: 1;
+  display: flex;
+}
+
+.text-container {
+  margin-top: 10px;
+  margin-left: 30px;
+  color: #fff;
+}
+
+.hero-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.hero-date {
+  font-size: 1rem;
+  color: #ddd;
+  font-style: italic;
+}
+
+/* White Block (Bottom Half) */
+.white-block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40%; /* Covers the bottom half */
+  background: #ffffff; /* White background */
+  z-index: 1;
+}
+
+.dots-overlay {
+  position: absolute;
+  top: 0;
+  width: 100%;
+  height: 100%; /* Matches the height of the white block */
+  background-image: radial-gradient(circle, #cccccc 2px, transparent 2px);
+  background-size: 20px 20px;
+  z-index: 2;
+  opacity: 0.5;
+}
+
+/* Floating Image */
+.floating-image {
+  position: absolute;
+  width: 550px; /* Adjust size for prominence */
+  height: auto;
+  z-index: 3;
+  top: 60%; /* Center image */
+  transform: translateY(-50%); /* Ensure image overlaps both blocks */
+  border-radius: 10px; /* Optional: Rounded corners */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Optional: Add shadow */
+}
+.content-section {
+  columns: 2; /* Number of columns */
+  column-gap: 45px; /* Gap between columns */
+  text-align: justify; /* Justify text for a magazine-like appearance */
+}
+
+.content-section p {
+  break-inside: avoid; /* Prevents breaking text awkwardly between columns */
+  margin-bottom: 20px; /* Adds spacing between paragraphs */
+}
+
+
+.article-content a {
+  color: #0077cc;
+  text-decoration: underline;
+}
+
+.article-content a:hover {
+  color: #005fa3;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .content-section {
+    columns: 1; /* Single column on mobile */
+  }
+  .hero-title {
+    font-size: 1.5rem;
+    color: black;
+  }
+  .hero-date {
+    font-size: 0.5rem;
+    color: black;
+  }
+  .content-section {
+    font-size: 1rem;
+    padding: 1%;
+  }
+  .colored-block{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 30%; /* Covers the top half */
+    background: linear-gradient(135deg, #ffffff, #ffffff); /* Purple gradient */
+    z-index: 1;
+    display: flex;
+  }
+  .white-block {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70%; /* Covers the bottom half */
+    background: #ffffff; /* White background */
+    z-index: 1;
+  }
+  .title-image-container {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+  }
+}
+/* Content Blocks */
+.content-block {
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd; /* Optional separator */
+}
+
+.article-content h1,
+.article-content h2,
+.article-content h3 {
+  margin-top: 20px;
+  margin-bottom: 10px;
+  color: #444;
+}
+
+.article-content p {
+  margin-bottom: 15px;
+  line-height: 1.8;
+}
