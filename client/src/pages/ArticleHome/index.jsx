@@ -7,22 +7,25 @@ const ArticlesHome = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const API_URL =
-    "http://localhost:3000/api/articles/get-articles" ||
-    "https://botstreet2025.onrender.com/api/articles/get-articles";
+  // Determine the API URL dynamically based on the current host
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
 
   useEffect(() => {
+    // Fetch articles from the API when the component mounts
     axios
-      .get(API_URL)
+      .get(`${API_BASE_URL}/api/articles/get-articles`) // Use the dynamic API URL
       .then((res) => {
-        setBlogs(res.data);
-        setLoading(false);
-        console.log(res.data);
+        setBlogs(res.data); // Store fetched articles in the state
+        setLoading(false); // Set loading to false after data is fetched
+        console.log(res.data); // Optional: log the fetched data (can be removed later)
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err); // Handle errors
       });
-  }, []);
+  }, [API_BASE_URL]);
 
   return (
     <>
