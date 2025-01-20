@@ -1,9 +1,12 @@
 import express from "express";
-import { getArticles } from "../controllers/articlesController";
+import { getArticles, publishArticle } from "../controllers/articlesController";
 
 const router = express.Router();
 
-// Define the route to get published articles
+// Route to get published articles
 router.get('/get-articles', getArticles);
+
+// Route to publish a new article
+router.post('/publish', publishArticle);
 
 export default router;

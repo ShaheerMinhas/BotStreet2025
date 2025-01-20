@@ -1,16 +1,17 @@
 import { createPool } from 'mysql2/promise';
 import dotenv from 'dotenv';
 
-// Load environment variables from the .env file
 dotenv.config();
 
-// Create a connection pool using environment variables
 const pool = createPool({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    port: parseInt(process.env.DB_PORT, 10), // Ensure the port is a number
+    host: 'mysql-1d5d11f7-samrazafar003-b598.c.aivencloud.com',       // DB Host
+    user: 'avnadmin',       // DB User
+    password: 'AVNS_k6A1Odud193pXjnUnBf', // DB Password
+    database: 'BotStreet',   // DB Name
+    port: 15410,         // Replace with your DB port
 });
 
 export default pool;
+
+
+ 
