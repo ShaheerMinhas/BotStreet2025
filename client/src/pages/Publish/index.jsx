@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import ReactQuill from 'react-quill';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 import 'react-quill/dist/quill.snow.css';
 
 const transformContent = (htmlContent) => {
@@ -24,8 +24,13 @@ const transformContent = (htmlContent) => {
     }
   });
 
-  return transformedLines.join('\n'); // Join transformed lines with newlines
+  return transformedLines.join('\n');
 };
+
+const API_BASE_URL =
+  window.location.hostname === 'localhost'
+    ? 'http://localhost:3000'
+    : 'https://botstreet2025.onrender.com';
 
 const Publish = () => {
   const [title, setTitle] = useState('');
@@ -34,8 +39,7 @@ const Publish = () => {
   const [imageUrl, setImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isImageUploading, setIsImageUploading] = useState(false);
-  const [status, setStatus] = useState('');
-  const navigate = useNavigate(); // Initialize navigate
+  const navigate = useNavigate();
 
   const handleTitleChange = (event) => {
     setTitle(event.target.value);
@@ -62,8 +66,8 @@ const Publish = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('upload_preset', 'BotStreet'); // Replace with your Cloudinary upload preset
-    formData.append('cloud_name', 'dzfoiqap7'); // Replace with your Cloudinary cloud name
+    formData.append('upload_preset', 'BotStreet');
+    formData.append('cloud_name', 'dzfoiqap7');
 
     setIsImageUploading(true);
 
@@ -89,7 +93,6 @@ const Publish = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    setStatus('published');
 
     if (!title || !content || !description) {
       alert('Title, content, and description are required.');
@@ -106,7 +109,7 @@ const Publish = () => {
     try {
       const transformedContent = transformContent(content);
 
-      const response = await fetch('http://localhost:3000/api/articles/publish', {
+      const response = await fetch(`${API_BASE_URL}/api/articles/publish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -124,7 +127,7 @@ const Publish = () => {
         setContent('');
         setDescription('');
         setImageUrl('');
-        navigate('/'); // Navigate to the home page
+        navigate('/');
       } else {
         alert('Error publishing article');
       }
@@ -140,7 +143,9 @@ const Publish = () => {
       <h1 className="text-3xl font-semibold text-center mb-8">Publish Your Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <label htmlFor="title" className="text-lg font-medium">Article Title</label>
+          <label htmlFor="title" className="text-lg font-medium">
+            Article Title
+          </label>
           <input
             type="text"
             id="title"
@@ -153,7 +158,9 @@ const Publish = () => {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="description" className="text-lg font-medium">Article Description</label>
+          <label htmlFor="description" className="text-lg font-medium">
+            Article Description
+          </label>
           <textarea
             id="description"
             value={description}
@@ -165,7 +172,9 @@ const Publish = () => {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="content" className="text-lg font-medium">Article Content</label>
+          <label htmlFor="content" className="text-lg font-medium">
+            Article Content
+          </label>
           <ReactQuill
             value={content}
             onChange={handleContentChange}
@@ -175,7 +184,9 @@ const Publish = () => {
         </div>
 
         <div className="space-y-2">
-          <label htmlFor="image" className="text-lg font-medium">Upload an Image</label>
+          <label htmlFor="image" className="text-lg font-medium">
+            Upload an Image
+          </label>
           <input
             type="file"
             id="image"
@@ -183,13 +194,22 @@ const Publish = () => {
             className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none"
           />
           {isImageUploading && <p className="text-gray-500">Uploading image...</p>}
-          {imageUrl && <p className="text-green-500">Image uploaded! <a href={imageUrl} target="_blank" rel="noopener noreferrer">View Image</a></p>}
+          {imageUrl && (
+            <p className="text-green-500">
+              Image uploaded!{' '}
+              <a href={imageUrl} target="_blank" rel="noopener noreferrer">
+                View Image
+              </a>
+            </p>
+          )}
         </div>
 
         <button
           type="submit"
           disabled={isSubmitting}
-          className={`w-full py-3 text-lg font-medium rounded-lg ${isSubmitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'} text-white transition-all`}
+          className={`w-full py-3 text-lg font-medium rounded-lg ${
+            isSubmitting ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700'
+          } text-white transition-all`}
         >
           {isSubmitting ? 'Publishing...' : 'Publish Article'}
         </button>
