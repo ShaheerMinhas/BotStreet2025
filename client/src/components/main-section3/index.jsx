@@ -6,15 +6,15 @@ import './App.css';
 function Articles() {
   const [blogList, setBlogList] = useState([]);
   const [loading, setLoading] = useState(true);
-  const API_URL =
-    "http://localhost:3000/api/articles/get-articles" ||
-    "https://botstreet2025.onrender.com/api/articles/get-articles";
-
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
   // Fetch articles when the component mounts
   useEffect(() => {
     // Update the URL to your local API endpoint
     axios
-      .get(API_URL) // API call to localhost server
+      .get(`${API_BASE_URL}/api/articles/get-articles`) // API call to localhost server
       .then((res) => {
         setBlogList(res.data); // Store fetched articles in the state
         setLoading(false); // Set loading to false once data is fetched

@@ -44,9 +44,12 @@ function ArticlePage() {
   const [blog, setBlog] = useState(null);
   const [error, setError] = useState(false); // To handle API call errors
 
-  const API_URL =
-    `http://localhost:3000/api/articlesfetch/getarticles/${id}` ||
-    `https://botstreet2025.onrender.com/api/articlesfetch/getarticles/${id}`;
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
+
+  const API_URL = `${API_BASE_URL}/api/articlesfetch/getarticles/${id}`;
 
   useEffect(() => {
     axios
