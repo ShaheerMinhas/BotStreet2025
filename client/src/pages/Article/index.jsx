@@ -11,10 +11,32 @@ import "./App.css";
 // Function to handle content formatting based on asterisks
 const breakLinesOnAsterisks = (content) => {
   if (!content) return [];
-  return content.split(/\#\#/).map((line, index) => ({
-    text: line.trim(),
-    isBold: index % 2 !== 0, // Every other section (odd indices) is bold
-  }));
+  const paragraphSeparator = "##"; // Define the paragraph separator
+  const paragraphs = content.split(paragraphSeparator); // Split content into paragraphs
+
+  return paragraphs.map((paragraph) => {
+    const parts = [];
+    const regex = /\*\*(.*?)\*\*/g; // Matches text between ** and **
+    let lastIndex = 0;
+    let match;
+
+    while ((match = regex.exec(paragraph)) !== null) {
+      // Push text before the match
+      if (match.index > lastIndex) {
+        parts.push({ text: paragraph.substring(lastIndex, match.index), isBold: false });
+      }
+      // Push the matched bold text
+      parts.push({ text: match[1], isBold: true });
+      lastIndex = regex.lastIndex;
+    }
+
+    // Push remaining text after the last match
+    if (lastIndex < paragraph.length) {
+      parts.push({ text: paragraph.substring(lastIndex), isBold: false });
+    }
+
+    return parts;
+  });
 };
 
 function ArticlePage() {
@@ -22,19 +44,23 @@ function ArticlePage() {
   const [blog, setBlog] = useState(null);
   const [error, setError] = useState(false); // To handle API call errors
 
+  const API_URL =
+    `http://localhost:3000/api/articlesfetch/getarticles/${id}` ||
+    `https://botstreet2025.onrender.com/api/articlesfetch/getarticles/${id}`;
+
   useEffect(() => {
     axios
-      .get(`http://localhost:3000/api/articlesfetch/getarticles/${id}`) // Using local server URL
+      .get(API_URL)
       .then((res) => {
         setBlog(res.data);
-        console.log('HERE')
+        console.log("HERE");
         setError(false); // Reset error state if data is fetched successfully
       })
       .catch((err) => {
         console.error(err);
         setError(true); // Set error state if API call fails
       });
-  }, [id]);
+  }, [API_URL]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -70,16 +96,20 @@ function ArticlePage() {
                 )}
               </div>
 
-              {/* Three-column text layout */}
+              {/* Render content with paragraphs and bold phrases */}
               <div className="content-section">
-                {breakLinesOnAsterisks(blog.content).map((line, index) => (
-                  <p
-                    key={index}
-                    style={{
-                      fontWeight: line.isBold ? "bold" : "normal",
-                    }}
-                  >
-                    {line.text}
+                {breakLinesOnAsterisks(blog.content).map((lineParts, paragraphIndex) => (
+                  <p key={paragraphIndex}>
+                    {lineParts.map((part, partIndex) => (
+                      <span
+                        key={partIndex}
+                        style={{
+                          fontWeight: part.isBold ? "bold" : "normal",
+                        }}
+                      >
+                        {part.text}
+                      </span>
+                    ))}
                   </p>
                 ))}
               </div>

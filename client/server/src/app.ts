@@ -11,8 +11,7 @@ const app = express();
 // Enable CORS
 app.use(
   cors({
-    origin: ['https://botstreetmag.netlify.app','http://localhost:5173', 'https://botstreet2025.onrender.com'], // Add both development and production URLs
-     // Allow requests from your frontend
+    origin: 'http://localhost:5173', // Allow requests from your frontend
     methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed methods
     credentials: true, // Allow cookies or authorization headers
   })
