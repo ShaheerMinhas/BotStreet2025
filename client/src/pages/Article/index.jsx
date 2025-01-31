@@ -23,7 +23,10 @@ const breakLinesOnAsterisks = (content) => {
     while ((match = regex.exec(paragraph)) !== null) {
       // Push text before the match
       if (match.index > lastIndex) {
-        parts.push({ text: paragraph.substring(lastIndex, match.index), isBold: false });
+        parts.push({
+          text: paragraph.substring(lastIndex, match.index),
+          isBold: false,
+        });
       }
       // Push the matched bold text
       parts.push({ text: match[1], isBold: true });
@@ -74,17 +77,33 @@ function ArticlePage() {
     <>
       <LogoDiv />
       <div className="article-container">
-        <div className="header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div
+          className="header-row"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Link className="blog-goBack" to="/">
             <span>&#8592;</span> <span>Go Back</span>
           </Link>
           {blog?.author_name && blog?.author_linkedin && (
             <a
               className="author-name"
-              href={blog.author_linkedin}
+              href={
+                blog.author_linkedin.startsWith("http")
+                  ? blog.author_linkedin
+                  : `https://${blog.author_linkedin}`
+              }
               target="_blank"
               rel="noopener noreferrer"
-              style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "blue" }}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                textDecoration: "none",
+                color: "blue",
+              }}
             >
               <span style={{ marginRight: "5px" }}>Author:</span>
               {blog.author_name}
@@ -94,7 +113,9 @@ function ArticlePage() {
 
         {/* Handle API call errors */}
         {error ? (
-          <div className="error-message">Failed to load article. Please try again later.</div>
+          <div className="error-message">
+            Failed to load article. Please try again later.
+          </div>
         ) : (
           blog && (
             <>
@@ -102,33 +123,41 @@ function ArticlePage() {
                 <div className="colored-block">
                   <div className="text-container">
                     <h1 className="hero-title">{blog.title}</h1>
-                    <p className="hero-date">Published {formatDate(blog.created_at)}</p>
+                    <p className="hero-date">
+                      Published {formatDate(blog.created_at)}
+                    </p>
                   </div>
                 </div>
                 <div className="white-block">
                   <div className="dots-overlay"></div>
                 </div>
                 {blog.image && blog.image[0] && (
-                  <img src={blog.image} alt="cover" className="floating-image" />
+                  <img
+                    src={blog.image}
+                    alt="cover"
+                    className="floating-image"
+                  />
                 )}
               </div>
 
               {/* Render content with paragraphs and bold phrases */}
               <div className="content-section">
-                {breakLinesOnAsterisks(blog.content).map((lineParts, paragraphIndex) => (
-                  <p key={paragraphIndex}>
-                    {lineParts.map((part, partIndex) => (
-                      <span
-                        key={partIndex}
-                        style={{
-                          fontWeight: part.isBold ? "bold" : "normal",
-                        }}
-                      >
-                        {part.text}
-                      </span>
-                    ))}
-                  </p>
-                ))}
+                {breakLinesOnAsterisks(blog.content).map(
+                  (lineParts, paragraphIndex) => (
+                    <p key={paragraphIndex}>
+                      {lineParts.map((part, partIndex) => (
+                        <span
+                          key={partIndex}
+                          style={{
+                            fontWeight: part.isBold ? "bold" : "normal",
+                          }}
+                        >
+                          {part.text}
+                        </span>
+                      ))}
+                    </p>
+                  )
+                )}
               </div>
             </>
           )
