@@ -15,7 +15,7 @@ export const getArticles = async (req: Request, res: Response): Promise<void> =>
 
 // Function to publish an article
 export const publishArticle = async (req: Request, res: Response): Promise<void> => {
-  const { title, description, content, image, user_id } = req.body;
+  const { title, description, content, image, user_id, author_name, author_linkedin } = req.body;
 
   try {
     // Validate required fields
@@ -29,9 +29,9 @@ export const publishArticle = async (req: Request, res: Response): Promise<void>
 
     // Insert the article into the database
     const [result]: any = await pool.query(
-      `INSERT INTO articles (title, description, content, image, user_id, created_at, updated_at, status) 
-       VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?)`,
-      [title, description || "", content, image || "", user_id || 1, articleStatus] // Use articleStatus explicitly
+      `INSERT INTO articles (title, description, content, image, user_id, created_at, updated_at, status,author_name, author_linkedin) 
+       VALUES (?, ?, ?, ?, ?, NOW(), NOW(), ?, ?, ?)`,
+      [title, description || "", content, image || "", user_id || 1, articleStatus,author_name, author_linkedin] // Use articleStatus explicitly
     );
 
     res.status(201).json({

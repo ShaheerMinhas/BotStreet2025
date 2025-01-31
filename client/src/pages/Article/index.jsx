@@ -74,9 +74,22 @@ function ArticlePage() {
     <>
       <LogoDiv />
       <div className="article-container">
-        <Link className="blog-goBack" to="/">
-          <span> &#8592;</span> <span>Go Back</span>
-        </Link>
+        <div className="header-row">
+          <Link className="blog-goBack" to="/">
+            <span> &#8592;</span> <span>Go Back</span>
+          </Link>
+          {blog?.author_name && blog?.author_linkedin && (
+            <a
+              className="author-name"
+              href={blog.author_linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ marginLeft: "auto", textDecoration: "none", color: "blue" }}
+            >
+              {blog.author_name}
+            </a>
+          )}
+        </div>
 
         {/* Handle API call errors */}
         {error ? (

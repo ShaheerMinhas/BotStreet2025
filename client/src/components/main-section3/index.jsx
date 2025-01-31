@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import BlogList from "./bloglist"; // Assuming this is the component to render the articles
-import './App.css';
+import "./App.css";
 
 function Articles() {
   const [blogList, setBlogList] = useState([]);
@@ -41,9 +42,11 @@ function Articles() {
         )}
 
         <div className="flex justify-center">
-          <button className="bg-black text-white font-bold py-2 px-4 rounded w-80">
-            View More
-          </button>
+          <Link to="/articles">
+            <button className="bg-black text-white font-bold py-2 px-4 rounded w-80">
+              View More
+            </button>
+          </Link>
         </div>
       </div>
     </div>

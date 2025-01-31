@@ -36,19 +36,17 @@ const Publish = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [description, setDescription] = useState('');
+  const [authorName, setAuthorName] = useState('');
+  const [authorLinkedIn, setAuthorLinkedIn] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isImageUploading, setIsImageUploading] = useState(false);
   const navigate = useNavigate();
 
-  const handleTitleChange = (event) => {
-    setTitle(event.target.value);
-  };
-
-  const handleContentChange = (value) => {
-    setContent(value);
-  };
-
+  const handleTitleChange = (event) => setTitle(event.target.value);
+  const handleContentChange = (value) => setContent(value);
+  const handleAuthorNameChange = (event) => setAuthorName(event.target.value);
+  const handleAuthorLinkedInChange = (event) => setAuthorLinkedIn(event.target.value);
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
     const wordCount = value.trim().split(/\s+/).length;
@@ -94,8 +92,8 @@ const Publish = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (!title || !content || !description) {
-      alert('Title, content, and description are required.');
+    if (!title || !content || !description || !authorName || !authorLinkedIn) {
+      alert('All fields are required.');
       return;
     }
 
@@ -116,6 +114,8 @@ const Publish = () => {
           title,
           content: transformedContent,
           description,
+          author_name: authorName,
+          author_linkedin: authorLinkedIn,
           image: imageUrl,
           status: 'published',
         }),
@@ -126,6 +126,8 @@ const Publish = () => {
         setTitle('');
         setContent('');
         setDescription('');
+        setAuthorName('');
+        setAuthorLinkedIn('');
         setImageUrl('');
         navigate('/');
       } else {
@@ -152,6 +154,36 @@ const Publish = () => {
             value={title}
             onChange={handleTitleChange}
             placeholder="Enter article title"
+            required
+            className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="authorName" className="text-lg font-medium">
+            Author Name
+          </label>
+          <input
+            type="text"
+            id="authorName"
+            value={authorName}
+            onChange={handleAuthorNameChange}
+            placeholder="Enter your name"
+            required
+            className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+          />
+        </div>
+
+        <div className="space-y-2">
+          <label htmlFor="authorLinkedIn" className="text-lg font-medium">
+            LinkedIn Profile/Website URL
+          </label>
+          <input
+            type="url"
+            id="authorLinkedIn"
+            value={authorLinkedIn}
+            onChange={handleAuthorLinkedInChange}
+            placeholder="Enter your LinkedIn/Website profile URL"
             required
             className="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
           />

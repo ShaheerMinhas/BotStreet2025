@@ -25,6 +25,7 @@ function App() {
         <Route path="/blog/:id" element={<ArticlePage />} />
         <Route path='/admin1' element ={<Admin />} />
         <Route path='/publish' element={<Publish />} />
+        
       </Routes>
     </Router>
   );

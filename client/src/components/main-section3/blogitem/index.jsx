@@ -7,7 +7,7 @@ const BlogItem = ({
     description,
     content,
     created_at,
-    authorName,
+    author_name,
     authorAvatar,
     image,
     category,
@@ -54,7 +54,7 @@ const BlogItem = ({
                 className="h-8 w-8 rounded-full mr-2"
               />
             )}
-            <span className="mr-2">By {authorName || "Unknown"}</span>
+            <span className="mr-2">By {author_name || "Unknown"}</span>
             <span>&#x2022;</span>
             <span className="ml-2">{formatDate(created_at)}</span>
           </div>

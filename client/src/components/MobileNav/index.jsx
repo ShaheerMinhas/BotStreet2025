@@ -24,7 +24,7 @@ function MobileNav({ toggleMenu }) {
       <Link to='/'><a href="#" className="block text-black border-t-2">H o m e</a></Link>
         <Link to='/publish'><a href="#" className="block text-black">P u b l i s h</a></Link>
         <Link to='/articles'><a href="#" className="block text-black">A r t i c l e s</a></Link>
-        <Link to='/'><a href="#" className="block text-black" >C o n t a c t U s</a></Link>
+        <Link to='/#contact-section'><a href="#" className="block text-black" >C o n t a c t U s</a></Link>
         <Link to='/signin'><a href="#" className="block bg-white border-b-2 text-black px-4 py-2">Login</a></Link>
       </nav>
     </div>
