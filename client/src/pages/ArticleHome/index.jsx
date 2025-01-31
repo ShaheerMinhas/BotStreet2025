@@ -50,12 +50,12 @@ const ArticlesHome = () => {
           )}
         </div>
 
-        {/* View More Button */}
+        {/* View More Button 
         <div className="flex justify-center mt-8">
           <button className="bg-black text-white font-bold py-2 px-4 rounded w-80">
             View More
           </button>
-        </div>
+        </div>*/}
       </div>
     </>
   );

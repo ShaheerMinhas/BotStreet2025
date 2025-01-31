@@ -74,9 +74,9 @@ function ArticlePage() {
     <>
       <LogoDiv />
       <div className="article-container">
-        <div className="header-row">
+        <div className="header-row" style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <Link className="blog-goBack" to="/">
-            <span> &#8592;</span> <span>Go Back</span>
+            <span>&#8592;</span> <span>Go Back</span>
           </Link>
           {blog?.author_name && blog?.author_linkedin && (
             <a
@@ -84,8 +84,9 @@ function ArticlePage() {
               href={blog.author_linkedin}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ marginLeft: "auto", textDecoration: "none", color: "blue" }}
+              style={{ display: "flex", alignItems: "center", textDecoration: "none", color: "blue" }}
             >
+              <span style={{ marginRight: "5px" }}>Author:</span>
               {blog.author_name}
             </a>
           )}

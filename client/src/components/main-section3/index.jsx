@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import BlogList from "./bloglist"; // Assuming this is the component to render the articles
+import BlogList from "./bloglist";
 import "./App.css";
 
 function Articles() {
@@ -11,15 +11,18 @@ function Articles() {
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
       : "https://botstreet2025.onrender.com";
-  // Fetch articles when the component mounts
+
   useEffect(() => {
-    // Update the URL to your local API endpoint
     axios
-      .get(`${API_BASE_URL}/api/articles/get-articles`) // API call to localhost server
+      .get(`${API_BASE_URL}/api/articles/get-articles`)
       .then((res) => {
-        setBlogList(res.data); // Store fetched articles in the state
-        setLoading(false); // Set loading to false once data is fetched
-        console.log(res.data); // Log the fetched data (can be removed later)
+        // Sort articles by created_at (most recent first) and take only 2 articles
+        const sortedArticles = res.data
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+          .slice(0, 2);
+
+        setBlogList(sortedArticles);
+        setLoading(false);
       })
       .catch((err) => {
         console.log(err);
@@ -36,9 +39,9 @@ function Articles() {
         </div>
 
         {loading ? (
-          <div>Loading...</div> // Show loading message while articles are being fetched
+          <div>Loading...</div>
         ) : (
-          <BlogList blogs={blogList} /> // Pass the fetched articles to BlogList component
+          <BlogList blogs={blogList} />
         )}
 
         <div className="flex justify-center">
