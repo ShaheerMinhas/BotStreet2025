@@ -28,6 +28,6 @@ app.use('/api/articlesfetch',fetcharticlesRoutes);
 
 // app.use('/api/email', emailRoutes); // Email-related routes
 // app.use('/api/organization', organizationRoutes); // Organization-related routes
-// app.use('/api/auth', authRoutes); // Authentication routes (register, login)
+ app.use('/api/auth', authRoutes); // Authentication routes (register, login)
 // app.use('/api/fetch' ,fetchUserRoutes);
 export default app;

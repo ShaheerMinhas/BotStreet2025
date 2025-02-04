@@ -80,7 +80,7 @@ function SignIn() {
 
               <div className="flex flex-row items-center mb-4">
                 <p className="text-gray-700 text-sm">Don't have an account?</p>
-                <Link to='/admin' className="ml-2 text-purple-900">Sign Up</Link>
+                <Link to='/signup' className="ml-2 text-purple-900">Sign Up</Link>
               </div>
 
               <div className="flex items-center justify-between">

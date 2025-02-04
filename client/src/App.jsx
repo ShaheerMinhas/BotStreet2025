@@ -12,6 +12,7 @@ import SignIn from './pages/Authentication/SignIn';
 import Admin from './pages/Admin';
 import ArticlesHome from './pages/ArticleHome';
 import Publish from './pages/Publish';
+import OtpPage from './pages/Authentication/SignUp/otp';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
         <Route path="/blog/:id" element={<ArticlePage />} />
         <Route path='/admin1' element ={<Admin />} />
         <Route path='/publish' element={<Publish />} />
-        
+        <Route path='/otp' element={<OtpPage />} />
       </Routes>
     </Router>
   );
