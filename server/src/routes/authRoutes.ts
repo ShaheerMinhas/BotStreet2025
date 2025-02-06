@@ -1,11 +1,10 @@
 import express from 'express';
-import { registerUser, loginUser,verifyOTP,sendOTP } from '../controllers/signupController';
+import {handleSendOtp,handleRegisterUser,handleVerifyOtp} from '../controllers/signupController';
 
 const router = express.Router();
 
 
-router.post('/register', registerUser);
-router.post('/login', loginUser);
-router.post('/verify-otp',verifyOTP);
-router.post('/send-otp',sendOTP);
+router.post('/register', handleRegisterUser);
+router.post('/verify-otp',handleVerifyOtp);
+router.post('/send-otp',handleSendOtp);
 export default router;
