@@ -19,6 +19,11 @@ const Publish = () => {
   };
   const handleAuthorNameChange = (event) => setAuthorName(event.target.value);
   const handleAuthorLinkedInChange = (event) => setAuthorLinkedIn(event.target.value);
+
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
   
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
@@ -128,7 +133,7 @@ const Publish = () => {
     // Commented out for debugging, remove comments to enable API submission
     
     try {
-      const response = await fetch('http://localhost:3000/api/articles/publish', {
+      const response = await fetch(`${API_BASE_URL}/api/articles/publish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
