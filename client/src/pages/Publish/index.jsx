@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import { useNavigate } from 'react-router-dom';
 const Publish = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -11,7 +11,7 @@ const Publish = () => {
   const [titleImageUrl, setTitleImageUrl] = useState('');
   const [articleImages, setArticleImages] = useState([]); // Stores image URLs in the article
   const quillRef = useRef(null);
-
+  const navigate = useNavigate();
   const handleTitleChange = (event) => setTitle(event.target.value);
   const handleContentChange = (value) => {
     setContent(value);
@@ -157,6 +157,7 @@ const Publish = () => {
         setAuthorLinkedIn('');
         setTitleImageUrl('');
         setArticleImages([]);
+        navigate('/');
       } else {
         alert('Error publishing article');
       }
