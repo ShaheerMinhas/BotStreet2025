@@ -126,9 +126,9 @@ const Publish = () => {
 
     // 🚨 SUBMISSION DISABLED 🚨
     // Commented out for debugging, remove comments to enable API submission
-    /*
+    
     try {
-      const response = await fetch(`${API_BASE_URL}/api/articles/publish`, {
+      const response = await fetch('http://localhost:3000/api/articles/publish', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -137,7 +137,7 @@ const Publish = () => {
           description,
           author_name: authorName,
           author_linkedin: authorLinkedIn,
-          title_image: titleImageUrl,
+          image: titleImageUrl,
           article_images: articleImages,
           status: 'published',
         }),
@@ -158,7 +158,7 @@ const Publish = () => {
     } catch (error) {
       alert('Error: ' + error.message);
     }
-    */
+    
   };
 
   return (
@@ -198,7 +198,7 @@ const Publish = () => {
         </div>
 
         <button type="submit" className="w-full py-3 text-lg font-medium rounded-lg bg-blue-600 hover:bg-blue-700 text-white transition-all">
-          Debug Article Data
+          Publish
         </button>
       </form>
     </div>

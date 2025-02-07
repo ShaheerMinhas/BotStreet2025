@@ -68,7 +68,7 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 40%; /* Covers the bottom half */
+  height: 45%; /* Covers the bottom half */
   background: #ffffff; /* White background */
   z-index: 1;
 }
@@ -88,11 +88,11 @@
 .floating-image {
   position: absolute;
   width: 550px; /* Adjust size for prominence */
-  height: auto;
+  height: 550px;
   z-index: 3;
-  top: 60%; /* Center image */
+  top: calc(60% + 20px);  /* Center image */
   transform: translateY(-50%); /* Ensure image overlaps both blocks */
-  border-radius: 10px; /* Optional: Rounded corners */
+  border-radius: 8px; /* Optional: Rounded corners */
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Optional: Add shadow */
 }
 .content-section {
@@ -164,7 +164,7 @@
   .title-image-container {
     position: relative;
     width: 100%;
-    height: 400px; /* Adjust as needed */
+    height: 600px; /* Adjust as needed */
     display: flex;
     justify-content: center;
     align-items: center;
