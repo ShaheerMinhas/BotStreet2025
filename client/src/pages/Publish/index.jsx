@@ -1,7 +1,7 @@
 import React, { useState, useRef, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
+import { useNavigate } from 'react-router-dom';
 const Publish = () => {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
@@ -11,7 +11,7 @@ const Publish = () => {
   const [titleImageUrl, setTitleImageUrl] = useState('');
   const [articleImages, setArticleImages] = useState([]); // Stores image URLs in the article
   const quillRef = useRef(null);
-
+  const navigate = useNavigate();
   const handleTitleChange = (event) => setTitle(event.target.value);
   const handleContentChange = (value) => {
     setContent(value);
@@ -19,6 +19,11 @@ const Publish = () => {
   };
   const handleAuthorNameChange = (event) => setAuthorName(event.target.value);
   const handleAuthorLinkedInChange = (event) => setAuthorLinkedIn(event.target.value);
+
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
   
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
@@ -128,7 +133,7 @@ const Publish = () => {
     // Commented out for debugging, remove comments to enable API submission
     
     try {
-      const response = await fetch('http://localhost:3000/api/articles/publish', {
+      const response = await fetch(`${API_BASE_URL}/api/articles/publish`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -152,6 +157,7 @@ const Publish = () => {
         setAuthorLinkedIn('');
         setTitleImageUrl('');
         setArticleImages([]);
+        navigate('/');
       } else {
         alert('Error publishing article');
       }
