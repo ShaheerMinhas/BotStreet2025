@@ -84,3 +84,29 @@ export const handleRegisterUser = async (req: Request, res: Response): Promise<a
     res.status(500).json({ error: 'Error registering user' });
   }
 };
+
+export const loginUser = async (req: Request, res: Response) : Promise<any> => {
+  const { email, password } = req.body;
+
+  try { 
+      console.log("Hi Trying to sign in");
+      const query = 'SELECT * FROM users WHERE email = ?';
+      const [rows]: any = await pool.execute(query, [email]);
+
+      if (rows.length === 0) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const user = rows[0];
+      const isPasswordValid = await bcrypt.compare(password, user.password);
+      if (!isPasswordValid) {
+          return res.status(401).json({ error: 'Invalid credentials' });
+      }
+
+      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+      res.status(200).json({ token });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Error logging in' });
+  }
+};

@@ -3,13 +3,45 @@ import Robo from '../../../components/main-section1/Robo-3d';
 import { Link, useNavigate } from 'react-router-dom';
 
 function SignIn() {
-  const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(null); // Define error state
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [error, setError] = useState(null);
+  const navigate = useNavigate();
   const backgroundImageUrl = "/assets/authbg.jpg";
 
+  const API_BASE_URL =
+    window.location.hostname === 'localhost'
+      ? 'http://localhost:3000/api/auth/login'
+      : 'https://botstreet2025.onrender.com/api/auth/login';
+
+  const handleSignIn = async (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    try {
+      const response = await fetch(API_BASE_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
+      // Save the token (You can store it in localStorage or sessionStorage)
+      localStorage.setItem('token', data.token);
+
+      // Redirect to a protected route
+      navigate('/dashboard');
+
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   return (
     <div
@@ -47,9 +79,9 @@ function SignIn() {
               Sign In
             </h1>
             {error && <p className="text-red-500 mb-4">{error}</p>}
-            <form>
+            <form onSubmit={handleSignIn}>
               <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="username">
+                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
                   Email
                 </label>
                 <input
@@ -84,7 +116,6 @@ function SignIn() {
               </div>
 
               <div className="flex items-center justify-between">
-               
                 <button
                   className="bg-fuchsia-900 hover:bg-blue-700 text-white font-color-1 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                   type="submit"
