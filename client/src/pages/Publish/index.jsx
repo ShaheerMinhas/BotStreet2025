@@ -163,7 +163,7 @@ const Publish = () => {
 
   return (
     <div className="max-w-4xl mx-auto p-8">
-      <h1 className="text-3xl font-semibold text-center mb-8">Publish Your Article UNDER CONSTRUCTION</h1>
+      <h1 className="text-3xl font-semibold text-center mb-8">Publish Your Article</h1>
       <form onSubmit={handleSubmit} className="space-y-6">
         
         <div className="space-y-2">
