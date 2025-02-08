@@ -1,9 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const BlogItem = ({
   blog: {
-    id,title,
+    id,
+    title,
     description,
     content,
     created_at,
@@ -13,21 +14,17 @@ const BlogItem = ({
     category,
   },
 }) => {
-  const linkStyle = {
-    textDecoration: "none", // Remove underline
-    color: "inherit", // Inherit text color from parent
-  };
+    const navigate = useNavigate();
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
     return new Date(dateString).toLocaleDateString(undefined, options);
-    
   };
 
   return (
-    <Link className="blogItem-wrap" to={`/blog/${id}`} style={linkStyle}>
+    <div className="blogItem-wrap">
       <div className="flex flex-col sm:flex-row bg-white overflow-hidden mb-6 border-b pb-8 border-gray-300">
-        {/* Left: Cover Image */console.log(image)}
+        {/* Left: Cover Image */ console.log(image)}
         <div className="w-full sm:w-3/12 flex-shrink-0">
           {image && image[0] && (
             <img
@@ -35,7 +32,6 @@ const BlogItem = ({
               src={image} // Assuming first image in the array
               alt={title}
             />
-           
           )}
         </div>
 
@@ -100,10 +96,22 @@ const BlogItem = ({
               </svg>
               Bookmark
             </span>
+            {/* Edit Button */}
+             {/* ✅ FIXED EDIT BUTTON */}
+        {/*<button
+          onClick={(e) => {
+            e.preventDefault(); // ✅ Prevents any unwanted navigation
+            e.stopPropagation(); // ✅ Stops click from bubbling to <Link>
+            navigate(`/edit/${id}`); // ✅ Navigates to edit page
+          }}
+          className="flex items-center cursor-pointer text-blue-500 hover:underline"
+        >
+          ✏️ Edit
+        </button>*/}
           </div>
         </div>
       </div>
-    </Link>
+    </div>
   );
 };
 
