@@ -5,7 +5,10 @@ import jwt from 'jsonwebtoken';
 const SECRET_KEY = 'your_secret_key';
 
 export const fetchUser = async (req: Request, res: Response): Promise<void> => {
+
+  console.log("Trying to confirm token and send back username");
   try {
+    console.log("Trying to confirm token and send back username");
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) { 
       res.status(401).json({ error: 'No token provided' });

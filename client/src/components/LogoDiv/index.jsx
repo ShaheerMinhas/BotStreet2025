@@ -1,10 +1,37 @@
-import React, { useState } from 'react';
-import logo from "./logo.png"; // Adjust the path based on your folder structure
-import MobileNav from '../MobileNav';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import logo from "./logo.png"; // Adjust path accordingly
+import MobileNav from '../MobileNav';
 
 function LogoDiv() {
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) return; // No token, user is not logged in
+
+      try {
+        const response = await fetch('http://localhost:3000/api/auth/islogin', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUser({ username: data.name });
+        }
+      } catch (error) {
+        console.error('Error checking login status:', error);
+      }
+    };
+
+    checkLoginStatus();
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -14,12 +41,12 @@ function LogoDiv() {
     <header className="bg-white">
       <div className="container mx-auto flex justify-between items-center pt-2 px-6 md:border-0 border-b-2 border-black">
         
-        {/* Logo on the left */}
+        {/* Logo */}
         <div className="flex items-center">
           <img src={logo} alt="Logo" className="md:h-16 md:w-56 h-8 w-28 md:border-0 mr-3" />
         </div>
 
-        {/* Hamburger Menu for Mobile */}
+        {/* Mobile Menu Button */}
         <div className="lg:hidden">
           <button 
             onClick={toggleMenu} 
@@ -42,15 +69,28 @@ function LogoDiv() {
           </button>
         </div>
 
-        {/* Full Menu (hidden on mobile) */}
-        <nav className="hidden lg:flex space-x-8">
-          <div className="border-2 border-black mr-16 pt-6 pb-6">
-          <Link to="/"> <a href="#" className="text-gray-600 hover:text-gray-900 p-6 border-r-2 border-black">H o m e</a></Link> 
-            <a href="#" className="text-gray-600 hover:text-gray-900 p-6 border-r-2 border-black">A b o u t U s</a>
-            <Link to="/articles"><a href="#" className="text-gray-600 hover:text-gray-900 p-6 border-r-2 border-black">A r t i c l e s</a></Link>
-            <Link to="/publish"><a href="#" className="text-gray-600 hover:text-gray-900 p-6 border-r-2 border-black">P u b l i s h</a></Link>
-           <a href="#" className="text-gray-600 hover:text-gray-900 p-6 border-r-2 border-black">C o n t a c t U s</a>
-           <Link to='/signin'> <a href="#" className="text-white hover:text-gray-900 bg-black p-6">Login</a></Link>
+        {/* Navigation Menu */}
+        <nav className="hidden lg:flex items-center space-x-8">
+          <div className="border-2 border-black flex items-center pt-6 pb-6 px-4">
+            <Link to="/" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">H o m e</Link>
+            <Link to="/articles" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">A r t i c l e s</Link>
+            <Link to="/publish" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">P u b l i s h</Link>
+            <a href="#" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">C o n t a c t U s</a>
+
+            {/* Show username if logged in, else show login button */}
+            {user ? (
+              <div className="flex items-center px-6">
+
+<span className="text-gray-600 font-semibold">{user.username}</span>
+                <img 
+                  src="https://static.vecteezy.com/system/resources/thumbnails/009/292/244/small/default-avatar-icon-of-social-media-user-vector.jpg" 
+                  alt="User" 
+                  className="w-8 h-8 rounded-full ml-4" 
+                />
+              </div>
+            ) : (
+              <Link to='/signin' className="text-black font-extrabold hover:text-gray-900  px-6 py-2 ml-2">LOG IN</Link>
+            )}
           </div>
         </nav>
       </div>

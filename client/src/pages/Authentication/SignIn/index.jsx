@@ -34,9 +34,9 @@ function SignIn() {
 
       // Save the token (You can store it in localStorage or sessionStorage)
       localStorage.setItem('token', data.token);
-
+      console.log('USER SIGNED IN SUCCESSFULY');
       // Redirect to a protected route
-      navigate('/dashboard');
+      navigate('/');
 
     } catch (err) {
       setError(err.message);

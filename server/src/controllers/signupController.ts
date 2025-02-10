@@ -8,7 +8,7 @@ import dotenv from 'dotenv';
 import crypto from 'crypto';
 dotenv.config();
 
-const SECRET_KEY = process.env.JWT_SECRET || 'your_secret_key';
+const SECRET_KEY =  'your_secret_key';
 
 // ✅ Nodemailer Configuration (BotStreet)
 const transporter = nodemailer.createTransport({
@@ -103,10 +103,39 @@ export const loginUser = async (req: Request, res: Response) : Promise<any> => {
           return res.status(401).json({ error: 'Invalid credentials' });
       }
 
-      const token = jwt.sign({ id: user.id, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
+      const token = jwt.sign({ id: user.userid, email: user.email }, SECRET_KEY, { expiresIn: '1h' });
       res.status(200).json({ token });
   } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Error logging in' });
+  }
+};
+
+export const fetchUser = async (req: Request, res: Response): Promise<void> => {
+
+  console.log("Trying to confirm token and send back username");
+  try {
+    console.log("Trying to confirm token and send back username");
+    const token = req.headers.authorization?.split(' ')[1];
+    if (!token) { 
+      res.status(401).json({ error: 'No token provided' });
+    }
+    console.log("TOKEN RECIEVED FROM FRONT IS ", token)
+    const decoded = jwt.verify(token, SECRET_KEY) as jwt.JwtPayload;
+    const userId = decoded.id;
+    console.log('FETCHING USERNAME FOR USER Id : ',userId);
+    const query = 'SELECT name FROM users WHERE userid = ?';
+    const [rows]: any = await pool.execute(query, [userId]);
+
+    if (rows.length === 0) {
+      res.status(404).json({ error: 'User not found' });
+    }
+
+    const user = rows[0];
+    console.log(user.name);
+    res.status(200).json({ name: user.name });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Error fetching user' });
   }
 };

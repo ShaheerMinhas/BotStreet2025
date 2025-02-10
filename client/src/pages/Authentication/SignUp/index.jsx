@@ -22,9 +22,7 @@ function SignUpPage() {
   const handleContinue = async (e) => {
     e.preventDefault();
     let userEmail = email.trim();
-    if (!userEmail.endsWith('.nu.edu.pk')) {
-      userEmail += '.nu.edu.pk';
-    }
+   
 
     try {
       await axios.post(`${API_BASE_URL}/api/auth/send-otp`, { email: userEmail });
