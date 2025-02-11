@@ -1,20 +1,51 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const BlogItem = ({
   blog: {
     id,
     title,
     description,
-    content,
     created_at,
     author_name,
     authorAvatar,
     image,
-    category,
+    user_id, // This is the blog author's user ID
   },
 }) => {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [user_Id, setUserId] = useState(null); // Store logged-in user's ID
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return; // No token, user is not logged in
+
+      try {
+        const response = await fetch("http://localhost:3000/api/auth/islogin", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          setUserId(data.userId); // ✅ Store user ID
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+
+    fetchUser();
+  }, []);
+
+  // Log user_Id only when it updates
+  useEffect(() => {
+    console.log("Updated user_Id:", user_Id);
+  }, [user_Id]);
 
   const formatDate = (dateString) => {
     const options = { year: "numeric", month: "long", day: "numeric" };
@@ -24,31 +55,21 @@ const BlogItem = ({
   return (
     <div className="blogItem-wrap">
       <div className="flex flex-col sm:flex-row bg-white overflow-hidden mb-6 border-b pb-8 border-gray-300">
-        {/* Left: Cover Image */ console.log(image)}
+        {/* Left: Cover Image */}
         <div className="w-full sm:w-3/12 flex-shrink-0">
-          {image && image[0] && (
-            <img
-              className="h-44 w-full sm:w-64 object-cover p-2"
-              src={image} // Assuming first image in the array
-              alt={title}
-            />
+          {image && (
+            <img className="h-44 w-full sm:w-64 object-cover p-2" src={image} alt={title} />
           )}
         </div>
 
         {/* Right: Content */}
         <div className="w-full sm:w-9/12 pt-2 sm:pl-4">
-          {/* Article Title */}
           <h3 className="text-xl font-bold text-gray-800 mb-2">{title}</h3>
 
           {/* Metadata */}
           <div className="flex items-center text-sm text-gray-500 mb-4">
-            {/* Author Avatar */}
             {authorAvatar && (
-              <img
-                src={authorAvatar}
-                alt={authorName}
-                className="h-8 w-8 rounded-full mr-2"
-              />
+              <img src={authorAvatar} alt={author_name} className="h-8 w-8 rounded-full mr-2" />
             )}
             <span className="mr-2">By {author_name || "Unknown"}</span>
             <span>&#x2022;</span>
@@ -96,18 +117,33 @@ const BlogItem = ({
               </svg>
               Bookmark
             </span>
-            {/* Edit Button */}
-             {/* ✅ FIXED EDIT BUTTON */}
-        {/*<button
-          onClick={(e) => {
-            e.preventDefault(); // ✅ Prevents any unwanted navigation
-            e.stopPropagation(); // ✅ Stops click from bubbling to <Link>
-            navigate(`/edit/${id}`); // ✅ Navigates to edit page
-          }}
-          className="flex items-center cursor-pointer text-blue-500 hover:underline"
-        >
-          ✏️ Edit
-        </button>*/}
+
+            {/* Edit Button (Only show if logged-in user is the author) */}
+            {user_Id && user_Id === user_id && (
+              <button
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigate(`/edit/${id}`);
+              }}
+              className="flex items-center cursor-pointer text-gray-700 hover:text-black"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="w-5 h-5 mr-1"
+              >
+                <path d="M12 20h9" />
+                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z" />
+              </svg>
+              Edit
+            </button>
+          )}
           </div>
         </div>
       </div>

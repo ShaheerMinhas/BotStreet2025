@@ -112,19 +112,22 @@ export const loginUser = async (req: Request, res: Response) : Promise<any> => {
 };
 
 export const fetchUser = async (req: Request, res: Response): Promise<void> => {
+  console.log("Trying to confirm token and send back user details");
 
-  console.log("Trying to confirm token and send back username");
   try {
-    console.log("Trying to confirm token and send back username");
     const token = req.headers.authorization?.split(' ')[1];
     if (!token) { 
       res.status(401).json({ error: 'No token provided' });
     }
-    console.log("TOKEN RECIEVED FROM FRONT IS ", token)
+
+    console.log("TOKEN RECEIVED FROM FRONTEND:", token);
+
     const decoded = jwt.verify(token, SECRET_KEY) as jwt.JwtPayload;
     const userId = decoded.id;
-    console.log('FETCHING USERNAME FOR USER Id : ',userId);
-    const query = 'SELECT name FROM users WHERE userid = ?';
+
+    console.log('FETCHING USER DETAILS FOR USER ID:', userId);
+
+    const query = 'SELECT userid, name FROM users WHERE userid = ?';
     const [rows]: any = await pool.execute(query, [userId]);
 
     if (rows.length === 0) {
@@ -132,10 +135,11 @@ export const fetchUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     const user = rows[0];
-    console.log(user.name);
-    res.status(200).json({ name: user.name });
+    console.log('User details:', user);
+
+    res.status(200).json({ userId: user.userid, name: user.name });
   } catch (error) {
-    console.error(error);
+    console.error('Error fetching user:', error);
     res.status(500).json({ error: 'Error fetching user' });
   }
 };

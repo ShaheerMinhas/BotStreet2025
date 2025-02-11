@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useEffect,useRef, useMemo } from 'react';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { useNavigate } from 'react-router-dom';
@@ -116,26 +116,49 @@ const Publish = () => {
       },
     },
   }), []);
+  const [userId, setUserId] = useState(null);
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return; // No token, user is not logged in
+  
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/auth/islogin`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+        });
+  
+        if (response.ok) {
+          const data = await response.json();
+          setUserId(data.userId); // ✅ Store user ID
+        }
+      } catch (error) {
+        console.error("Error checking login status:", error);
+      }
+    };
+  
+    fetchUserId();
+  }, []);
+  
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
-    // 🔍 DEBUGGING CONSOLE LOGS:
-    console.log('📝 Article Title:', title);
-    console.log('👤 Author Name:', authorName);
-    console.log('🔗 LinkedIn URL:', authorLinkedIn);
-    console.log('📜 Description:', description);
-    console.log('📄 Article Content:', content);
-    console.log('🖼️ Title Image URL:', titleImageUrl);
-    console.log('📷 Images inside Article:', articleImages);
-
-    // 🚨 SUBMISSION DISABLED 🚨
-    // Commented out for debugging, remove comments to enable API submission
-    
+  
+    if (!userId) {
+      alert("User is not logged in. Please log in to publish.");
+      return;
+    }
+  
     try {
       const response = await fetch(`${API_BASE_URL}/api/articles/publish`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`, // Send token in request
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({
           title,
           content,
@@ -144,28 +167,29 @@ const Publish = () => {
           author_linkedin: authorLinkedIn,
           image: titleImageUrl,
           article_images: articleImages,
-          status: 'published',
+          status: "published",
+          userId, // ✅ Include userId in request
         }),
       });
-
+  
       if (response.ok) {
-        alert('Article published successfully!');
-        setTitle('');
-        setContent('');
-        setDescription('');
-        setAuthorName('');
-        setAuthorLinkedIn('');
-        setTitleImageUrl('');
+        alert("Article published successfully!");
+        setTitle("");
+        setContent("");
+        setDescription("");
+        setAuthorName("");
+        setAuthorLinkedIn("");
+        setTitleImageUrl("");
         setArticleImages([]);
-        navigate('/');
+        navigate("/");
       } else {
-        alert('Error publishing article');
+        alert("Error publishing article");
       }
     } catch (error) {
-      alert('Error: ' + error.message);
+      alert("Error: " + error.message);
     }
-    
   };
+  
 
   return (
     <div className="max-w-4xl mx-auto p-8">

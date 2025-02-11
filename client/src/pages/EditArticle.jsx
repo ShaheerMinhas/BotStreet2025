@@ -5,10 +5,10 @@ import "react-quill/dist/quill.snow.css";
 
 const EditArticle = () => {
   const { id } = useParams(); // Get article ID from URL
-  console.log("Editing article ID:", id);
   const navigate = useNavigate();
   const quillRef = useRef(null);
 
+  // State variables
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [description, setDescription] = useState("");
@@ -16,38 +16,46 @@ const EditArticle = () => {
   const [authorLinkedIn, setAuthorLinkedIn] = useState("");
   const [titleImageUrl, setTitleImageUrl] = useState("");
   const [articleImages, setArticleImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const API_BASE_URL = 'http://localhost:3000';
+  const API_BASE_URL = "http://localhost:3000";
 
+  // Fetch article details
   useEffect(() => {
-    // Fetch article data
     const fetchArticle = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/api/articles/${id}`);
-        if (response.ok) {
-          const data = await response.json();
-          setTitle(data.title);
-          setContent(data.content);
-          setDescription(data.description);
-          setAuthorName(data.author_name);
-          setAuthorLinkedIn(data.author_linkedin);
-          setTitleImageUrl(data.image);
-          setArticleImages(data.article_images || []);
-        } else {
-          alert("Failed to fetch article data");
-        }
+        const response = await fetch(`${API_BASE_URL}/api/articles/articles/${id}`);
+        if (!response.ok) throw new Error("Failed to fetch article");
+        const data = await response.json();
+
+        setTitle(data.title);
+        setContent(data.content);
+        setDescription(data.description);
+        setAuthorName(data.author_name);
+        setAuthorLinkedIn(data.author_linkedin);
+        setTitleImageUrl(data.image);
+        setArticleImages(data.article_images || []);
       } catch (error) {
-        alert("Error fetching article: " + error.message);
+        setError(error.message);
       }
     };
     fetchArticle();
   }, [id]);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setLoading(true);
+    setError("");
+  
+    if (!title || !content || !authorName) {
+      setError("Title, content, and author name are required!");
+      setLoading(false);
+      return;
+    }
+  
     try {
       const response = await fetch(`${API_BASE_URL}/api/articles/update/${id}`, {
-        method: "PUT",
+        method: "POST", // ✅ Ensure backend allows POST for updates (or change to PUT)
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           title,
@@ -59,39 +67,98 @@ const EditArticle = () => {
           article_images: articleImages,
         }),
       });
-
-      if (response.ok) {
-        alert("Article updated successfully!");
-        navigate("/");
-      } else {
-        alert("Error updating article");
-      }
+  
+      if (!response.ok) throw new Error("Error updating article");
+  
+      alert("Article updated successfully!");
+      navigate("/");
     } catch (error) {
-      alert("Error: " + error.message);
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
   };
+  
 
-  const modules = useMemo(() => ({
-    toolbar: [
-      [{ header: "1" }, { header: "2" }, { font: [] }],
-      [{ list: "ordered" }, { list: "bullet" }],
-      ["bold", "italic", "underline", "strike"],
-      [{ align: [] }],
-      ["link", "image"],
-      ["clean"],
-    ],
-  }), []);
+  // ReactQuill toolbar options
+  const modules = useMemo(
+    () => ({
+      toolbar: [
+        [{ header: "1" }, { header: "2" }, { font: [] }],
+        [{ list: "ordered" }, { list: "bullet" }],
+        ["bold", "italic", "underline", "strike"],
+        [{ align: [] }],
+        ["link", "image"],
+        ["clean"],
+      ],
+    }),
+    []
+  );
 
   return (
-    <div className="max-w-4xl mx-auto p-8">
+    <div className="max-w-4xl mx-auto p-8 bg-white rounded-lg shadow-md">
       <h1 className="text-3xl font-semibold text-center mb-8">Edit Article</h1>
+      
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+
       <form onSubmit={handleSubmit} className="space-y-6">
-        <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full p-4 border-2" placeholder="Article Title"/>
-        <input type="text" value={authorName} onChange={(e) => setAuthorName(e.target.value)} required className="w-full p-4 border-2" placeholder="Author Name"/>
-        <input type="url" value={authorLinkedIn} onChange={(e) => setAuthorLinkedIn(e.target.value)} required className="w-full p-4 border-2" placeholder="LinkedIn"/>
-        <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows="4" className="w-full p-4 border-2" placeholder="Description (max 100 words)"/>
-        <ReactQuill ref={quillRef} value={content} onChange={setContent} modules={modules} className="border-2" />
-        <button type="submit" className="w-full py-3 bg-blue-600 text-white">Update Article</button>
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          required
+          className="w-full p-4 border rounded"
+          placeholder="Article Title"
+        />
+        <input
+          type="text"
+          value={authorName}
+          onChange={(e) => setAuthorName(e.target.value)}
+          required
+          className="w-full p-4 border rounded"
+          placeholder="Author Name"
+        />
+        <input
+          type="url"
+          value={authorLinkedIn}
+          onChange={(e) => setAuthorLinkedIn(e.target.value)}
+          className="w-full p-4 border rounded"
+          placeholder="LinkedIn (Optional)"
+        />
+        <textarea
+          value={description}
+          onChange={(e) => setDescription(e.target.value)}
+          rows="3"
+          className="w-full p-4 border rounded"
+          placeholder="Short Description (Max 100 words)"
+        />
+        
+        {/* Article Content (Quill Editor) */}
+        <ReactQuill
+          ref={quillRef}
+          value={content}
+          onChange={setContent}
+          modules={modules}
+          className="border rounded"
+        />
+
+        <input
+          type="url"
+          value={titleImageUrl}
+          onChange={(e) => setTitleImageUrl(e.target.value)}
+          className="w-full p-4 border rounded"
+          placeholder="Title Image URL"
+        />
+
+        <button
+          type="submit"
+          disabled={loading}
+          className={`w-full py-3 text-white font-semibold rounded ${
+            loading ? "bg-gray-500 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"
+          }`}
+        >
+          {loading ? "Updating..." : "Update Article"}
+        </button>
       </form>
     </div>
   );

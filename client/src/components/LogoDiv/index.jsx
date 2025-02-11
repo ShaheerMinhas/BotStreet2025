@@ -73,8 +73,12 @@ function LogoDiv() {
         <nav className="hidden lg:flex items-center space-x-8">
           <div className="border-2 border-black flex items-center pt-6 pb-6 px-4">
             <Link to="/" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">H o m e</Link>
-            <Link to="/articles" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">A r t i c l e s</Link>
-            <Link to="/publish" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">P u b l i s h</Link>
+            <Link to="/articles" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">A r t i c l e s</Link><Link 
+  to={user ? "/publish" : "/signin"} 
+  className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black"
+>
+  P u b l i s h
+</Link>
             <a href="#" className="text-gray-600 hover:text-gray-900 px-6 border-r-2 border-black">C o n t a c t U s</a>
 
             {/* Show username if logged in, else show login button */}
