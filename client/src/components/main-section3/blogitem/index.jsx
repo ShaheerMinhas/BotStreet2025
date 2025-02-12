@@ -15,14 +15,17 @@ const BlogItem = ({
 }) => {
   const navigate = useNavigate();
   const [user_Id, setUserId] = useState(null); // Store logged-in user's ID
-
+  const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) return; // No token, user is not logged in
 
       try {
-        const response = await fetch("http://localhost:3000/api/auth/islogin", {
+        const response = await fetch(`${API_BASE_URL}/api/auth/islogin`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${token}`,
