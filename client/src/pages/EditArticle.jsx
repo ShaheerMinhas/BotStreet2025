@@ -19,7 +19,10 @@ const EditArticle = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const API_BASE_URL = "http://localhost:3000";
+    const API_BASE_URL =
+    window.location.hostname === "localhost"
+      ? "http://localhost:3000"
+      : "https://botstreet2025.onrender.com";
 
   // Fetch article details
   useEffect(() => {
