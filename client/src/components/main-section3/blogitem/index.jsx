@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const BlogItem = ({
   blog: {
@@ -56,7 +57,7 @@ const BlogItem = ({
   };
 
   return (
-    <div className="blogItem-wrap">
+    <Link to={`/blog/${id}`} className="blogItem-wrap">
       <div className="flex flex-col sm:flex-row bg-white overflow-hidden mb-6 border-b pb-8 border-gray-300">
         {/* Left: Cover Image */}
         <div className="w-full sm:w-3/12 flex-shrink-0">
@@ -150,7 +151,7 @@ const BlogItem = ({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 };
 

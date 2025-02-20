@@ -16,7 +16,7 @@ const breakLinesOnAsterisks = (content) => {
 
   return paragraphs.map((paragraph) => {
     const parts = [];
-    const regex = /(\*\*(.*?)\*\*)|(<img\s+src=["'](.*?)["'].*?>)/g; // Matches **bold** text and <img> tags
+    const regex = /(\*\*(.*?)\*\*)|(<img\s+src=["'](.*?)["'].*?>)|(<a\s+href=["'](.*?)["'].*?>(.*?)<\/a>)/g; // Matches **bold** text and <img> tags
     let lastIndex = 0;
     let match;
 
@@ -27,6 +27,7 @@ const breakLinesOnAsterisks = (content) => {
           text: paragraph.substring(lastIndex, match.index),
           isBold: false,
           isImage: false,
+          isLink: false,
         });
       }
 
@@ -36,6 +37,7 @@ const breakLinesOnAsterisks = (content) => {
           text: match[2], // Extract bold text
           isBold: true,
           isImage: false,
+          isLink: false,
         });
       } else if (match[3]) {
         // Image found
@@ -43,7 +45,10 @@ const breakLinesOnAsterisks = (content) => {
           imageUrl: match[4], // Extract image URL
           isBold: false,
           isImage: true,
+          isLink: false,
         });
+      }else if (match[5]) {
+        parts.push({ linkUrl: match[6], linkText: match[7], isBold: false, isImage: false, isLink: true });
       }
 
       lastIndex = regex.lastIndex;
@@ -54,6 +59,7 @@ const breakLinesOnAsterisks = (content) => {
       parts.push({
         text: paragraph.substring(lastIndex),
         isBold: false,
+        isLink: false,
         isImage: false,
       });
     }
@@ -170,7 +176,11 @@ function ArticlePage() {
                               display: "block",
                             }}
                           />
-                        ) : (
+                        ) : part.isLink ? (
+                          <a key={partIndex} href={part.linkUrl} target="_blank" rel="noopener noreferrer" style={{ color: "blue", textDecoration: "underline" }}>
+                            {part.linkText}
+                          </a>
+                        ):(
                           <span
                             key={partIndex}
                             style={{

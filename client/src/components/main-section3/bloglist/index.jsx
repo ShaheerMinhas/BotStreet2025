@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import BlogItem from "../blogitem";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Robo from "../../main-section1/Robo-3d";
 Robo
 const BlogList = ({ blogs }) => {
   const [displayCount, setDisplayCount] = useState(1); // Default to 1 for vertical list
-
+  const navigate = useNavigate();
   useEffect(() => {
     const updateDisplayCount = () => {
       if (window.innerWidth <= 480) {
@@ -14,6 +16,9 @@ const BlogList = ({ blogs }) => {
       }
     };
 
+    const handleClick = () => {
+      navigate(`/blog/${blog.id}`);
+    };
     // Set the initial value
     updateDisplayCount();
 

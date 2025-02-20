@@ -87,7 +87,14 @@ const Publish = () => {
     const images = Array.from(doc.querySelectorAll('img')).map(img => img.src);
     setArticleImages(images);
   };
-
+  const linkHandler = () => {
+    const quill = quillRef.current.getEditor();
+    const range = quill.getSelection();
+    const url = prompt('Enter the URL:');
+    if (url) {
+      quill.format('link', url);
+    }
+  };
   // Custom Image Handler for Quill toolbar
   const imageHandler = () => {
     const input = document.createElement('input');
@@ -113,6 +120,7 @@ const Publish = () => {
       ],
       handlers: {
         image: imageHandler, // Custom image handler
+        link: linkHandler,
       },
     },
   }), []);

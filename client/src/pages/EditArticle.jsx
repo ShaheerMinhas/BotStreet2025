@@ -81,7 +81,17 @@ const EditArticle = () => {
       setLoading(false);
     }
   };
-  
+  const handleLink = () => {
+    const editor = quillRef.current.getEditor();
+    const range = editor.getSelection();
+    if (range) {
+      const existingLink = editor.getFormat(range).link;
+      const url = prompt("Enter the URL", existingLink || "http://");
+      if (url) {
+        editor.format("link", url);
+      }
+    }
+  };
 
   // ReactQuill toolbar options
   const modules = useMemo(
