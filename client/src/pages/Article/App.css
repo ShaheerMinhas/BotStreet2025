@@ -118,79 +118,64 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  /* Title container should shrink dynamically */
-  .title-image-container {
-    position: relative;
-    width: 100%;
-    height: auto; /* Use auto to avoid fixed height */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    overflow: hidden;
-    padding-top: 20px; /* Optional spacing */
+  .content-section {
+    columns: 1; /* Single column on mobile */
   }
-
-  /* Adjust the floating image */
-  .floating-image {
-    position: relative; /* Switch from absolute to relative */
-    width: 80%; /* Scale for mobile */
-    height: auto;
-    top: auto;
-    transform: none; /* Remove translate */
-    margin-top: -50px; /* Pull up if needed */
+  .hero-title {
+    font-size: 1.2rem;
+    color: black;
   }
-
-  /* Simplify colored block */
-  .colored-block {
+  .hero-date {
+    font-size: 0.5rem;
+    color: black;
+    margin-bottom: 20%;
+    padding-bottom: 20%;
+  }
+  .content-section {
+    font-size: 1rem;
+    padding: 1%;
+  }
+  .colored-block{
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    height: 40%; /* Reduced height */
-    background: linear-gradient(135deg, #ffffff, #ffffff); /* Maintain white */
+    height: 40%; /* Covers the top half */
+    background: linear-gradient(135deg, #ffffff, #ffffff); /* Purple gradient */
     z-index: 1;
     display: flex;
   }
-
-  /* White block adjustment */
   .white-block {
     position: absolute;
     bottom: 0;
     left: 0;
     width: 100%;
     top: 50%;
-    height: 50%; /* Balanced height */
-    background: #ffffff;
+    height: 70%; /* Covers the bottom half */
+    background: #ffffff; /* White background */
     z-index: 1;
   }
-
-  /* Dots overlay */
-  .dots-overlay {
-    top: 0;
-    height: 100%;
-    background-size: 15px 15px;
+  .floating-image{
+    top:70%;
   }
-
-  /* Hero title and date */
-  .hero-title {
-    font-size: 1.5rem;
-    color: black;
-    text-align: center;
+  .dots-overlay{
+    top: 15%;
   }
-
-  .hero-date {
-    font-size: 0.8rem;
-    color: black;
-    text-align: center;
-    margin-top: 5px;
+  .title-image-container {
+    position: relative;
+    width: 100%;
+    height: 400px; /* Adjust as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
   }
-
-  /* Content adjustments */
-  .content-section {
-    columns: 1;
-    font-size: 1rem;
-    padding: 1%;
-  }
+}
+/* Content Blocks */
+.content-block {
+  margin-bottom: 20px;
+  padding: 10px 0;
+  border-bottom: 1px solid #ddd; /* Optional separator */
 }
 
 .article-content h1,
@@ -199,4 +184,9 @@
   margin-top: 20px;
   margin-bottom: 10px;
   color: #444;
+}
+
+.article-content p {
+  margin-bottom: 15px;
+  line-height: 1.8;
 }
