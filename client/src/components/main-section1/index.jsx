@@ -7,7 +7,7 @@ const Section1 = () => {
   const navigate = useNavigate(); // Initialize the navigate function
 
   const handleGetStartedClick = () => {
-    navigate("/publish"); // Navigate to the /publish page when the button is clicked
+    navigate("/signin"); // Navigate to the /publish page when the button is clicked
   };
 
   return (
