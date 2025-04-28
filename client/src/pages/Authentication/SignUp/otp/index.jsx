@@ -38,7 +38,14 @@ function OTPPage() {
       navigate('/home');
     } catch (error) {
       setIsLoading(false);
-      setError(error.response?.data?.error || 'Something went wrong!');
+      // Handle various error cases more specifically
+      if (error.response?.status === 400) {
+        setError('Invalid OTP. Please try again.');
+      } else if (error.response?.status === 404) {
+        setError('OTP expired. Please request a new OTP.');
+      } else {
+        setError(error.response?.data?.error || 'Something went wrong!');
+      }
     }
   };
 

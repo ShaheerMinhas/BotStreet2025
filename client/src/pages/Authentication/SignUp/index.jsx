@@ -25,6 +25,12 @@ function SignUpPage() {
    
 
     try {
+      const checkResponse = await axios.post(`${API_BASE_URL}/api/auth/check-email`, { email: userEmail });
+
+    if (checkResponse.data.exists) {
+      setError('Account already exists with this email.');
+      return;  // stop further processing
+    }
       await axios.post(`${API_BASE_URL}/api/auth/send-otp`, { email: userEmail });
       localStorage.setItem('userEmail', userEmail);
       setShowOtpPopup(true);
