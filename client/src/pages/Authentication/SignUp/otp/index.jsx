@@ -34,6 +34,7 @@ function OTPPage() {
       });
 
       // On success, navigate to the home page or dashboard
+      setIsLoading(false);
       navigate('/home');
     } catch (error) {
       setIsLoading(false);

@@ -37,7 +37,7 @@ function SignUpPage() {
   const handleVerifyOtp = async (e) => {
     e.preventDefault();
     console.log("Trying from frontend verifying OTP");
-  
+    setIsLoading(true);
     try {
       console.log("Sending request to verify OTP...");
       const response = await axios.post(`${API_BASE_URL}/api/auth/verify-otp`, { email, otp });
@@ -55,6 +55,8 @@ function SignUpPage() {
     } catch (error) {
       console.log("Error verifying OTP:", error);
       setError(error.response?.data?.error || 'OTP verification failed.');
+    }finally {
+      setIsLoading(false); // ✅ Always stop loading
     }
   };
   
@@ -133,8 +135,9 @@ function SignUpPage() {
                       className="bg-fuchsia-900 text-white font-bold py-2 px-4 rounded mt-4 w-full"
                       type="button"
                       onClick={handleVerifyOtp}
-                    >
-                      Verify OTP
+                      disabled={isLoading}
+                    > {isLoading ? 'Verifying...' : 'Verify OTP'}
+                      
                     </button>
                   </form>
                 </div>
