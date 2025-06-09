@@ -27,6 +27,5 @@
     "start": "ts-node-dev src/index.ts",
     "build": "tsc",
     "dev": "ts-node-dev src/index.ts"
-  },
-  "packageManager": "yarn@4.9.2"
+  }
 }
