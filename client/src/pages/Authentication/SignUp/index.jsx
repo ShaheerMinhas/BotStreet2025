@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Robo from '../../../components/main-section1/Robo-3d';
 
+
 function SignUpPage() {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ function SignUpPage() {
   const [showOtpPopup, setShowOtpPopup] = useState(false);
   const navigate = useNavigate();
   const backgroundImageUrl = '/assets/authbg.jpg';
-
+  const [isLoading,setIsLoading]=useState(false)
   // Handle sending OTP
   const handleContinue = async (e) => {
     e.preventDefault();
@@ -47,7 +48,7 @@ function SignUpPage() {
       if (response.data.message === 'OTP verified successfully') {
         console.log("OTP Verified! Registering user...");
         await axios.post(`${API_BASE_URL}/api/auth/register`, { name: username, email, password });
-        navigate('/');
+        navigate('/signin');
       } else {
         console.log("Invalid OTP response:", response.data);
         setError('Invalid OTP.');

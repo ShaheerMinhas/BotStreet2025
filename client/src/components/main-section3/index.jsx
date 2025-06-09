@@ -14,7 +14,7 @@ function Articles() {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/api/articles/get-articles`)
+      .get(`https://botstreet2025.onrender.com/api/articles/get-articles`)
       .then((res) => {
         // Sort articles by created_at (most recent first) and take only 2 articles
         const sortedArticles = res.data

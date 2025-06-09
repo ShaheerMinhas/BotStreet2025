@@ -47,7 +47,7 @@ export const handleSendOtp = async (req: Request, res: Response): Promise<any> =
   const expiresAt = new Date();
   expiresAt.setMinutes(expiresAt.getMinutes() + 5);
 
-  await pool.execute('INSERT INTO otp_verifications (email, otp, expires_at) VALUES (?, ?, ?)', [email, otp, expiresAt]);
+  await pool.execute('INSERT INTO otp_verification (email, otp, expires_at) VALUES (?, ?, ?)', [email, otp, expiresAt]);
   await sendOTPEmail(email, otp);
 
   res.status(200).json({ message: 'OTP sent successfully. Please check your email.' });
@@ -57,7 +57,7 @@ export const handleVerifyOtp = async (req: Request, res: Response): Promise<any>
   const { email, otp } = req.body;
 
   console.log("Now trying to check good otp verify");
-  const [storedOtp]: any = await pool.execute('SELECT otp FROM otp_verifications WHERE email = ?', [email]);
+  const [storedOtp]: any = await pool.execute('SELECT otp FROM otp_verification WHERE email = ?', [email]);
 
   if (storedOtp.length === 0 || storedOtp[0].otp !== otp) {
     return res.status(400).json({ error: 'Invalid OTP' });
@@ -76,7 +76,7 @@ export const handleRegisterUser = async (req: Request, res: Response): Promise<a
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
     await pool.execute('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, hashedPassword]);
-    await pool.execute('DELETE FROM otp_verifications WHERE email = ?', [email]);
+    await pool.execute('DELETE FROM otp_verification WHERE email = ?', [email]);
 
     res.status(201).json({ message: 'User registered successfully' });
   } catch (error) {
@@ -90,7 +90,7 @@ export const loginUser = async (req: Request, res: Response) : Promise<any> => {
 
   try { 
       console.log("Hi Trying to sign in");
-      const query = 'SELECT * FROM users WHERE email = ?';
+      const query = 'SELECT * FROM users WHERE email = ?'; 
       const [rows]: any = await pool.execute(query, [email]);
 
       if (rows.length === 0) {
