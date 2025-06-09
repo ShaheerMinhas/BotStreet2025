@@ -22,11 +22,23 @@ const transporter = nodemailer.createTransport({
 // ✅ Function to Send OTP via Email
 
 const sendOTPEmail = async (email: string, otp: string) => {
+  const htmlContent = `
+    <div style="max-width:500px;margin:auto;padding:20px;font-family:'Segoe UI',sans-serif;background:#f8f8f8;border-radius:10px;border:1px solid #ddd">
+      <h2 style="text-align:center;color:#4a148c">🔐 Email Verification Code</h2>
+      <p style="text-align:center;font-size:16px">Hello 👋,</p>
+      <p style="text-align:center;font-size:16px">Use the OTP below to verify your email address:</p>
+      <div style="background:#ede7f6;color:#4a148c;font-size:24px;font-weight:bold;padding:15px;text-align:center;border-radius:8px;margin:20px 0">${otp}</div>
+      <p style="text-align:center;color:#555">This code will expire in 5 minutes.</p>
+      <p style="text-align:center;font-size:13px;color:#888;">If you didn't request this, you can safely ignore this email.</p>
+      <hr />
+      <p style="text-align:center;font-size:12px;color:#aaa">&copy; 2025 BotStreet</p>
+    </div>
+  `;
   const mailOptions = {
     from: process.env.EMAIL_USER,
     to: email,
     subject: 'Your OTP for Registration',
-    text: `Your OTP for registration is: ${otp}`,
+    html: htmlContent,
   };
   await transporter.sendMail(mailOptions);
 };
