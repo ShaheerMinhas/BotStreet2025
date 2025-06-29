@@ -19,6 +19,34 @@ const transporter = nodemailer.createTransport({
   },
 });
 
+export const sendEssaySubmissionEmail = async (req: Request, res: Response) => {
+  const htmlContent = `
+    <div style="max-width:600px;margin:auto;padding:30px;font-family:'Segoe UI',sans-serif;background:#f0f4f8;border-radius:10px;border:1px solid #d0d7de">
+      <h2 style="text-align:center;color:#0d47a1">📚 Essay Submission</h2>
+      <p style="font-size:16px;text-align:center;color:#333">HEYYY 🙌</p>
+      <p style="font-size:18px;text-align:center;color:#1b5e20;font-weight:600;">ESSAY WAS SUBMITTED</p>
+      <p style="text-align:center;color:#555">Wooshhhhh! Check Out Cloudinary</p>
+      <hr style="margin:30px 0;border:0;border-top:1px solid #ccc" />
+      <p style="text-align:center;font-size:12px;color:#999;">&copy; 2025 Shaheer Co. All rights reserved.</p>
+    </div>
+  `;
+
+  const mailOptions = {
+    from: process.env.EMAIL_USER,
+    to: ['l217404@lhr.nu.edu.pk', 'minhasshaheer0@gmail.com'],
+    subject: 'Essay Submission Notification',
+    html: htmlContent,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    res.status(200).json({ message: 'Essay submission email sent successfully' });
+  } catch (error) {
+    console.error('Error sending essay submission email:', error);
+    res.status(500).json({ error: 'Failed to send essay submission email' });
+  }
+};
+
 // ✅ Function to Send OTP via Email
 
 const sendOTPEmail = async (email: string, otp: string) => {
@@ -50,27 +78,43 @@ const generateOTP = (): string => {
 export const handleSendOtp = async (req: Request, res: Response): Promise<any> => {
   const { email } = req.body;
 
-  const [userRows]: any = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
-  if (userRows.length > 0) {
-    return res.status(400).json({ error: 'Email already in use' });
+  try {
+    // Check if user already exists
+    const [userRows]: any = await pool.execute('SELECT * FROM users WHERE email = ?', [email]);
+    if (userRows.length > 0) {
+      return res.status(400).json({ error: 'Email already in use' });
+    }
+
+    const otp = generateOTP();
+    const expiresAt = new Date();
+    expiresAt.setMinutes(expiresAt.getMinutes() + 5);
+
+    // Insert or update OTP
+    await pool.execute(
+      `INSERT INTO otp_verification (email, otp, expires_at)
+       VALUES (?, ?, ?)
+       ON DUPLICATE KEY UPDATE
+         otp = VALUES(otp),
+         expires_at = VALUES(expires_at)`,
+      [email, otp, expiresAt]
+    );
+
+    await sendOTPEmail(email, otp);
+    res.status(200).json({ message: 'OTP sent successfully. Please check your email.' });
+    
+  } catch (error) {
+    console.error('Error sending OTP:', error);
+    res.status(500).json({ error: 'Error sending OTP' });
   }
-
-  const otp = generateOTP();
-  const expiresAt = new Date();
-  expiresAt.setMinutes(expiresAt.getMinutes() + 5);
-
-  await pool.execute('INSERT INTO otp_verification (email, otp, expires_at) VALUES (?, ?, ?)', [email, otp, expiresAt]);
-  await sendOTPEmail(email, otp);
-
-  res.status(200).json({ message: 'OTP sent successfully. Please check your email.' });
 };
+
 
 export const handleVerifyOtp = async (req: Request, res: Response): Promise<any> => {
   const { email, otp } = req.body;
 
   console.log("Now trying to check good otp verify");
   const [storedOtp]: any = await pool.execute('SELECT otp FROM otp_verification WHERE email = ?', [email]);
-
+  console.log(storedOtp,email,otp)
   if (storedOtp.length === 0 || storedOtp[0].otp !== otp) {
     return res.status(400).json({ error: 'Invalid OTP' });
   }
