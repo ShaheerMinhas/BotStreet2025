@@ -33,7 +33,7 @@ export const sendEssaySubmissionEmail = async (req: Request, res: Response) => {
 
   const mailOptions = {
     from: process.env.EMAIL_USER,
-    to: ['l217404@lhr.nu.edu.pk', 'minhasshaheer0@gmail.com'],
+    to: ['l217504@lhr.nu.edu.pk', 'minhasshaheer0@gmail.com'],
     subject: 'Essay Submission Notification',
     html: htmlContent,
   };
@@ -72,7 +72,7 @@ const sendOTPEmail = async (email: string, otp: string) => {
 };
 
 const generateOTP = (): string => {
-  return crypto.randomBytes(3).toString('hex');
+  return Math.floor(1000 + Math.random() * 9000).toString(); // Generate a 4-digit numeric OTP
 };
 
 export const handleSendOtp = async (req: Request, res: Response): Promise<any> => {

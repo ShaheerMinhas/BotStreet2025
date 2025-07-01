@@ -1,8 +1,10 @@
+import React from 'react';
 import Spline from '@splinetool/react-spline';
 
 export default function Robo() {
   return (
-    <div className="w-full"><Spline scene="https://prod.spline.design/KyomCvunPnU-avMw/scene.splinecode" /></div>
-    
+    <div className="w-full">
+      <img src="/assets/image.png" alt="Robot" className="w-full h-auto" />
+    </div>
   );
 }
