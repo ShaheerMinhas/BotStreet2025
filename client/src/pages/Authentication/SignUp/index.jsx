@@ -6,7 +6,7 @@ import Robo from '../../../components/main-section1/Robo-3d';
 const API_BASE_URL =
   window.location.hostname === 'localhost'
     ? 'http://localhost:3000'
-    : 'https://botstreet2025-production.up.railway.app/';
+    : 'https://botstreet2025-production.up.railway.app';
 
 function SignUpPage() {
   const [username, setUsername] = useState('');

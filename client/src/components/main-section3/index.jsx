@@ -10,11 +10,11 @@ function Articles() {
   const API_BASE_URL =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://botstreet2025-production.up.railway.app/";
+      : "https://botstreet2025-production.up.railway.app";
 
   useEffect(() => {
     axios
-      .get(`https://botstreet2025-production.up.railway.app//api/articles/get-articles`)
+      .get(`https://botstreet2025-production.up.railway.app/api/articles/get-articles`)
       .then((res) => {
         // Sort articles by created_at (most recent first) and take only 2 articles
         const sortedArticles = res.data

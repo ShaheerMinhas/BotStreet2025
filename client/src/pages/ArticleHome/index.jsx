@@ -11,7 +11,7 @@ const ArticlesHome = () => {
   const API_BASE_URL =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://botstreet2025-production.up.railway.app/";
+      : "https://botstreet2025-production.up.railway.app";
 
   useEffect(() => {
     // Fetch articles from the API when the component mounts

@@ -12,7 +12,7 @@ function SignIn() {
   const API_BASE_URL =
     window.location.hostname === 'localhost'
       ? 'http://localhost:3000/api/auth/login'
-      : 'https://botstreet2025-production.up.railway.app//api/auth/login';
+      : 'https://botstreet2025-production.up.railway.app/api/auth/login';
 
   const handleSignIn = async (e) => {
     e.preventDefault(); // Prevent default form submission

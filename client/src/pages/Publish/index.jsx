@@ -23,7 +23,7 @@ const Publish = () => {
   const API_BASE_URL =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://botstreet2025-production.up.railway.app/";
+      : "https://botstreet2025-production.up.railway.app";
   
   const handleDescriptionChange = (event) => {
     const value = event.target.value;
