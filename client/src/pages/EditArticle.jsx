@@ -22,7 +22,7 @@ const EditArticle = () => {
     const API_BASE_URL =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://botstreet2025.onrender.com";
+      : "https://botstreet2025-production.up.railway.app/";
 
   // Fetch article details
   useEffect(() => {

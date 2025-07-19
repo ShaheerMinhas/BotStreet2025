@@ -19,7 +19,7 @@ const BlogItem = ({
   const API_BASE_URL =
     window.location.hostname === "localhost"
       ? "http://localhost:3000"
-      : "https://botstreet2025.onrender.com";
+      : "https://botstreet2025-production.up.railway.app/";
   useEffect(() => {
     const fetchUser = async () => {
       const token = localStorage.getItem("token");
